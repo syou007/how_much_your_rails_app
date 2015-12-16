@@ -22,7 +22,7 @@ class Program
   # 値段を算出します。
   def price_calculation
     # 値段の初期化
-    self.price = 0
+    self.price = file_price
 
     # ファイルを読み込んで値段を算出する。
     open(@file_path) { |file|
@@ -35,14 +35,16 @@ class Program
 
         if comment_line?(l)
           # コメントの値段
-          self.price = comment_line_price
+          self.price += comment_line_price
         else
+          # プログラム構文解析
+
           if proc_line?(l)
             # 制御構文の値段
-            self.price = proc_line_price
+            self.price += proc_line_price
           else
             # 通常行の値段
-            self.price = line_price
+            self.price += line_price
           end
         end
       end
@@ -60,6 +62,8 @@ class Program
   # 制御処理
   #
 
+  # メソッドであるか？
+
   # 制御構文であるか？
   def proc_line?(line)
     (/^.*(if\s|for\s|while\s).*$/ =~ line) != nil
@@ -73,6 +77,11 @@ class Program
   #
   # 値段
   #
+
+  # ファイルの値段
+  def file_price
+    @file_price ||= config(:file_price)
+  end
 
   # 制御構文の値段
   def proc_line_price
