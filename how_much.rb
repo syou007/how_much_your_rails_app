@@ -5,6 +5,7 @@
 require_relative 'lib/load_file'
 LoadFile.path 'controllers'
 LoadFile.path 'views'
+require_relative 'models/program' # 基底ファイルは先に読み込む
 LoadFile.path 'models'
 LoadFile.path 'lib'
 

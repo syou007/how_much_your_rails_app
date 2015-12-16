@@ -4,6 +4,7 @@ app:
   # 基本設定
   base:
     # 対象外にするフォルダ
+    # ※外部から持ってきたフォルダは対象外にすると正確になる。
     ignore_dir:
       - .git
       - tmp
@@ -11,6 +12,12 @@ app:
       - test
       - vendor
       - .idea
+
+    # 対象外にするファイル
+    ignore_file:
+      - bootstrap.js
+      - bootstrap.min.js
+      - schema.rb
 
     # デバッグフラグ
     debug: false
@@ -20,24 +27,80 @@ app:
     # 基本設定
     base:
       # ファイル一つに対する金額
-      file_price: 1000
+      file_price: 800
 
       # 一行毎に発生する金額(円)
       line:
         # 通常行の値段
         line_price: 100
         # 制御処理行の値段
-        proc_line_price: 200
+        proc_line_price: 300
         # コメント行の値段
         comment_line_price: 50
 
       # メソッドに発生する値段(円)
       method:
-        price: 300
+        price: 500
         # メソッド行数が長い場合に発生するペナルティ（コメントは含まず）
-        max_line: 30
+        max_line: 20
         # メソッド行数が長い場合に引かれる金額(通常の値段は別途入ります。)
-        max_line_over_price: -200
+        # 設定行が長い場合は相殺されるので丁度良いかと。
+        max_line_over_price: -90
 
     # Ruby設定(baseと同じ)
     ruby:
+
+    # Migrate設定
+    migrate:
+      # ファイル一つに対する金額
+      file_price: 2000
+
+      # 一行毎に発生する金額(円)
+      line:
+        # 通常行の値段
+        line_price: 150
+        # インデックス（制御処理行）の値段
+        proc_line_price: 300
+
+    # routes設定
+    routes:
+      # ファイル一つに対する金額(Railsが自動的に作るため）
+      file_price: 0
+      # 一行毎に発生する金額(円)
+      line:
+        # 通常行の値段
+        line_price: 50
+        # resources（制御処理行）の値段
+        proc_line_price: 200
+
+      # メソッドに発生する値段(円)
+      method:
+        price: 100
+        # メソッド行数が長い場合に発生するペナルティ（コメントは含まず）
+        max_line: 40
+        # メソッド行数が長い場合に引かれる金額(通常の値段は別途入ります。)
+        # 設定行が長い場合は相殺されるので丁度良いかと。
+        max_line_over_price: -40
+
+    # CoffeeScript設定
+    coffee:
+      # ファイル一つに対する金額(Railsが自動的に作るため）
+      file_price: 0
+
+    # JSの設定
+    js:
+      # ファイル一つに対する金額
+      file_price: 500
+      # 一行毎に発生する金額(円)
+      line:
+        # 通常行の値段(長くなる傾向があるため）
+        line_price: 50
+
+    # CSSの設定
+    css:
+      # ファイル一つに対する金額
+      file_price: 100
+      # 一行毎に発生する金額(円)
+      line:
+        # 通常行の値段
+        line_price: 30

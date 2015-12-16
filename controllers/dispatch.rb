@@ -4,6 +4,7 @@ class Dispatch
   def initialize(rails_path, output_path)
     @rails_path = rails_path
     @output_path = output_path
+    @programs = []
   end
 
   # 実際に値段を算出します。
@@ -19,11 +20,12 @@ class Dispatch
         Logger.debug "[Start]   #{file_name}"
 
         # インスタンスを生成して実行します。
-        instance = model.new("#{@rails_path}#{rails_path}/#{file_name}")
+        instance = model.new(@rails_path, rails_path, file_name)
         instance.price_calculation
         price += instance.price
 
-        # TODO 出力ページの作成
+        # 出力ページ用にインスタンス保持
+        @programs << instance
 
         Logger.debug "[End]   #{file_name}"
       else
@@ -31,7 +33,14 @@ class Dispatch
       end
     end
 
-    Logger.info "Your Rails app will be #{price} yen"
+    Logger.info "Your Rails app will be #{price.jpy_comma} yen"
+    Logger.info "During the reporting ..."
+
+    # 作成したパスを返却
+    output_path = Page.create_index(@output_path, price.jpy_comma, @programs)
+
+    Logger.info "Report is here > #{output_path}"
+    `open #{output_path}`
   end
 
   private
@@ -39,9 +48,31 @@ class Dispatch
   # 使用するパーサーモデルを取得
   def get_parser_model(rails_path, file_name)
     # 指定のモデルを取得します。
-    if File::extname(file_name) == ".rb"
-      # Rubyのパーサーを返します。
-      return RubyProgram
+    if AppConfig.get(:base, :ignore_file).include?(file_name)
+      # 対象外ファイル
+      return nil
+    elsif File::extname(file_name) == ".rb"
+      # マイグレートファイル
+      if rails_path.index("migrate") != nil
+        # Migrateのパーサーを返します。
+        return MigrateProgram
+      elsif rails_path.index("config") != nil && file_name == "routes.rb"
+        # Routesのパーサーを返します。
+        return RoutesProgram
+      else
+        # Rubyのパーサーを返します。
+        return RubyProgram
+      end
+    elsif File::extname(file_name) == ".coffee"
+      # CoffeeScriptのパーサーを返します。
+      return CoffeeProgram
+    elsif File::extname(file_name) == ".js"
+      # Jsのパーサーを返します。
+      return JsProgram
+    elsif File::extname(file_name) == ".css" || File::extname(file_name) == ".scss" ||
+        File::extname(file_name) == ".sass"
+      # CSSのパーサーを返します。
+      return CssProgram
     end
 
     # 使用するモデルなし。
