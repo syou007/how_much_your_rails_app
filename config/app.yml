@@ -1,0 +1,15 @@
+# アプリケーションに関する設定内容
+app:
+
+  # 基本設定
+  base:
+    # 対象外にするフォルダ
+    ignore_dir:
+      - .git
+      - tmp
+      - log
+      - test
+      - vendor
+      - .idea
+
+
