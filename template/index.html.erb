@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Cache-Control" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>あなたのプログラムは<%= price %>円です。</title>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" media="screen" href="./bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+  <h1>あなたのプログラムは<%= price %>円です。</h1>
+  <h2>内訳</h2>
+  <table class="table">
+    <thead>
+    <tr>
+      <th>ファイルパス</th>
+      <th>ファイル名</th>
+      <th>使用パーサー</th>
+      <th>メソッド数</th>
+      <th>減点ライン</th>
+      <th>制御ライン</th>
+      <th>ライン</th>
+      <th>コメント</th>
+      <th>値段</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% programs.each {|program| %>
+        <tr>
+          <td><small><%= program.path %></small></td>
+          <td><%= program.file_name %></td>
+          <td><%= program.class.name %></td>
+          <td><%= program.method_count %></td>
+          <td><%= program.method_line_over_count %></td>
+          <td><%= program.proc_line_count %></td>
+          <td><%= program.line_count %></td>
+          <td><%= program.comment_count %></td>
+          <td class="text-right"><%= program.price.jpy_comma %>円</td>
+        </tr>
+    <% } %>
+    </tbody>
+  </table>
+</div>
+</body>
