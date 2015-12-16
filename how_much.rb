@@ -1,8 +1,5 @@
 #!/usr/bin/ruby
 
-# 起動確認用に表示
-puts "Welcome to joke app!"
-
 # 必要なファイルを読み込みます。
 # $:.unshift File.dirname(__FILE__)
 require_relative 'lib/load_file'
@@ -10,6 +7,9 @@ LoadFile.path 'controllers'
 LoadFile.path 'views'
 LoadFile.path 'models'
 LoadFile.path 'lib'
+
+# 起動確認用に表示
+Logger.info "Welcome to joke app!"
 
 # ヘルプの表示
 if !ARGV[0] || ARGV[0] == "-h" || ARGV[0] == "--help"
@@ -26,19 +26,19 @@ else
 
   # 対象のフォルダが存在するかチェック
   unless Validate.dir? rails_path
-    puts "rails project path is not found. => #{rails_path}"
+    Logger.info "rails project path is not found. => #{rails_path}"
     exit 1
   end
 
   # 出力フォルダが存在するかチェック
   unless Validate.dir? output_path
-    puts "output path is not found. => #{output_path}"
+    Logger.info "output path is not found. => #{output_path}"
     exit 1
   end
 
   # Railsプロジェクトであるかチェック
   unless Validate.rails_project? rails_path
-    puts "`#{rails_path}` path is not rails project."
+    Logger.info "`#{rails_path}` path is not rails project."
     exit 1
   end
 

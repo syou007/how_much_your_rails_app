@@ -12,4 +12,29 @@ app:
       - vendor
       - .idea
 
+    # デバッグフラグ
+    debug: false
 
+  # 解析するプログラム単位での設定
+  program:
+    # 基本設定
+    base:
+      # 一行毎に発生する金額(円)
+      line:
+        # 通常行の値段
+        line_price: 500
+        # 制御処理行の値段
+        proc_line_price: 1000
+        # コメント行の値段
+        comment_line_price: 100
+
+      # メソッドに発生する値段(円)
+      method:
+        price: 2000
+        # メソッド行数が長い場合に発生するペナルティ（コメントは含まず）
+        max_line: 30
+        # メソッド行数が長い場合に引かれる金額(通常の値段は別途入ります。)
+        max_line_over_price: -500
+
+    # Ruby設定(baseと同じ)
+    ruby:

@@ -8,8 +8,12 @@ class AppConfig
     yml = AppConfig.yml["app"]
     keys.each { |key|
       yml = yml[key.to_s]
+      return nil if yml.nil?
     }
-    # 中身を書き換えられないようにコピーを渡す。
+
+    # 中身を書き換えられないようにコピーを渡す。(コピーできないオブジェクトは除外)
+    return yml if yml.nil? || yml.class == TrueClass ||
+        yml.class == FalseClass || yml.class == Numeric || yml.class == Symbol
     return yml.dup
   end
 
